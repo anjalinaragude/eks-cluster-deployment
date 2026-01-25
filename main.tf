@@ -1,16 +1,13 @@
 # Get the VPC
 data "aws_vpc" "eks_vpc" {
-  filter {
-    name   = "tag:Name"
-    values = ["Our-VPC"]   # Replace with your VPC Name tag
-  }
+  id = "vpc-0123456789abcdef0"  # <-- Replace with your actual VPC ID
 }
 
-# Get all public subnets in that VPC
-data "aws_subnets" "available-subnets" {
+# Select subnets in that VPC with specific tag
+data "aws_subnets" "available_subnets" {
   filter {
     name   = "vpc-id"
-    values = ["vpc-0effd14880c83192c"]  # Replace with your VPC ID
+    values = [data.aws_vpc.eks_vpc.id]
   }
 
   filter {
