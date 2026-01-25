@@ -10,7 +10,7 @@ data "aws_vpc" "eks_vpc" {
 data "aws_subnets" "available-subnets" {
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.eks_vpc.id]
+    values = ["vpc-0effd14880c83192c"]  # Replace with your VPC ID
   }
 
   filter {
