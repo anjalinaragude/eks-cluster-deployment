@@ -1,17 +1,32 @@
-data "aws_subnets" "available-subnets"{
-    filter {
-        name = "tag:Name"
-        values = ["Our-Public-*"]
-    }
+# Get the VPC
+data "aws_vpc" "eks_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["Our-VPC"]   # Replace with your VPC Name tag
+  }
+}
+
+# Get all public subnets in that VPC
+data "aws_subnets" "available-subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.eks_vpc.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["Our-Public-*"]
+  }
 }
 
 resource "aws_eks_cluster" "project-cluster" {
   name     = "project-cluster"
   role_arn = aws_iam_role.example.arn
 
-  vpc_config {
-    subnet_ids = data.aws_subnets.available-subnets.ids
-  }
+ vpc_config {
+  subnet_ids = data.aws_subnets.available-subnets.ids
+}
+
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
