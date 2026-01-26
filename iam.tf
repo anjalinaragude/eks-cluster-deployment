@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "assume_node_role" {
 }
 
 resource "aws_iam_role" "example" {
-  name               = "eks-cluster-example-2"
+  name               = "eks-cluster-example-3"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEKSVPCResourceControlle
 }
 
 resource "aws_iam_role" "worker" {
-  name               = "eks-node-role-2"
+  name               = "eks-node-role-3"
   assume_role_policy = data.aws_iam_policy_document.assume_node_role.json
 }
 
